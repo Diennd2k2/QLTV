@@ -1,0 +1,141 @@
+﻿@model X.PagedList.IPagedList<QLTV.Models.Books>
+@using X.PagedList.Mvc.Core;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section class="content" style="padding-top: 20px">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Danh sách đầu sách</h3>
+                </div>
+                <div class="card-tools card-header">
+                    <form action="/Admin/Book/Index" method="GET">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Vị trí kệ </label>
+                                    <select class="form-control" name="IdBookShelfs">
+                                        <option value="">-------------------- Chọn vị trí --------------------</option>
+                                        @foreach (var cate in ViewBag.listBookShelfs)
+                                        {
+                                            <option value="@cate.IdBookShelf">@cate.NameBookShelf</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Nhà xuất bản </label>
+                                    <select class="form-control" name="IdPublisingHose">
+                                        <option value="">--------------------  Chọn nhà xuất bản --------------------</option>
+                                        @foreach (var cate in ViewBag.listPublisingHose)
+                                        {
+                                            <option value="@cate.IdPublisingHouse">@cate.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Tìm kiếm </label>
+                                    <div class="input-group" style="width: 350px;">
+                                        <input type="text" name="Search" class="form-control float-right" placeholder="Nhâp tên sách, mâ, mô tả">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default form-control">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <a class="btn btn-primary" href="/Admin/Book/Create">Thêm mới sách </a>
+                    @if (TempData["success"] != null)
+                    {
+                        <div class="alert alert-success" role="alert" style="margin-top:20px">
+                            @Html.Raw(TempData["success"])
+                        </div>
+                    }
+                    @if (TempData["eror"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert" style="margin-top:20px">
+                            @Html.Raw(TempData["eror"])
+                        </div>
+                    }
+                    <table class="table table-bordered" style="margin-top: 20px">
+                        <thead>
+                            <tr>
+                                <th>Mã sách</th>
+                                <th>Tên sách</th>
+                                <th width="10%">Ảnh sách</th>
+                                <th>Giá mua</th>
+                                <th>Giá cho thuê</th>
+                                <th>Số lượng</th>
+                                <th>Nhà xuất bản</th>
+                                <th>Vị trí kệ</th>
+                                <th>Năm xuất bản</th>
+                                <th>Trạng thái</th>
+                                <th style="width: 7%">Công cụ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var book in Model)
+                            {
+                                <tr>
+                                    <td>@book.IdBook</td>
+                                    <td>@book.NameBook</td>
+                                    <td><img src="~/Books/@book.UrlImage" alt="@book.NameBook" width="60%"></td>
+                                    <td>@book.Price VNĐ</td>
+                                    <td>@book.LoanPrice VNĐ</td>
+                                    <td>@book.Quantitly</td>
+                                    <td>@book.IdPublisingHouseNavigation.Name</td>
+                                    <td>@book.IdBookShelfNavigation.NameBookShelf</td>
+                                    <td>@book.YearPublising</td>
+                                    <td>
+                                        @if (book.Status == 1)
+                                        {
+                                            <span class="badge bg-success">Sử dụng</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Không sử dụng</span>
+                                        }
+
+                                    </td>
+                                    <td>
+                                        <a style="color: green" href="/Admin/Book/Edit?id=@book.IdBook" title="Sửa thông tin"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a style="color: red;padding-left: 20px" href="/Admin/Book/Delete?id=@book.IdBook" title="Xóa bản ghi"><i class="fa fa-trash" aria-hidden="true"></i></a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-footer clearfix">
+                    <ul class="pagination pagination-sm m-0 float-right">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+                         new PagedListRenderOptions
+                            {
+                                LiElementClasses = new string[] { "page-item" },
+                                PageClasses = new string[] { "page-link" }
+                            }
+                        )
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</section>
+

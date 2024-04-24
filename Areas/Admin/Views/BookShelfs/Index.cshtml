@@ -1,0 +1,99 @@
+﻿
+@model X.PagedList.IPagedList<QLTV.Models.BookShelfs>
+@using X.PagedList.Mvc.Core;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section class="content" style="padding-top: 20px">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách kệ sách</h3>
+                        <div class="card-tools">
+                            <form action="/Admin/BookShelfs/Index" method="GET">
+                                <div class="input-group input-group-sm" style="width: 350px;">
+                                    <input type="text" name="Search" class="form-control float-right" placeholder="Nhâp id, tên kệ, mô tả...">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <a class="btn btn-primary" href="/Admin/BookShelfs/Create">Thêm mới kệ sách</a>
+                        @if (TempData["success"] != null)
+                        {
+                            <div class="alert alert-success" role="alert" style="margin-top:20px">
+                                @Html.Raw(TempData["success"])
+                            </div>
+                        }
+                        @if (TempData["eror"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert" style="margin-top:20px">
+                                @Html.Raw(TempData["eror"])
+                            </div>
+                        }
+                        <table class="table table-bordered" style="margin-top: 20px">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Mã kệ sách</th>
+                                    <th style="text-align: center">Tên kệ sách</th>
+                                    <th style="text-align: center">Mô tả</th>
+                                    <th style="text-align: center">Ngày tạo</th>
+                                    <th style="text-align: center">Trạng thái</th>
+                                    <th style="text-align: center">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var bookShelfs in Model)
+                                {
+                                    <tr>
+                                        <td style="text-align: center">@bookShelfs.IdBookShelf</td>
+                                        <td>@bookShelfs.NameBookShelf</td>
+                                        <td>@bookShelfs.DescribeNote</td>
+                                        <td>@*@Html.DisplayFor(Model => bookShelfs.CreateDate.Value.ToString("dd/MM/yyyy"))*@</td>
+                                        <td style="text-align: center">
+                                            @if (bookShelfs.Status == 1)
+                                            {
+                                                <span class="badge bg-success">Sử dụng</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Không sử dụng</span>
+                                            }
+                                        </td>
+                                        <td style="text-align: center">
+                                            <a style="color: green" href="/Admin/BookShelfs/Edit?id=@bookShelfs.IdBookShelf" title="Sửa thông tin"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a style="color: red;padding-left: 20px" href="/Admin/BookShelfs/Delete?id=@bookShelfs.IdBookShelf" title="Xóa bản ghi"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        <ul class="pagination pagination-sm m-0 float-right">
+                            @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+                             new PagedListRenderOptions
+                                {
+                                    LiElementClasses = new string[] { "page-item" },
+                                    PageClasses = new string[] { "page-link" }
+                                }
+                            )
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

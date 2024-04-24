@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section class="content" style="padding-top: 20px">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Thêm mới nhà xuất bản</h3>
+                    </div>
+
+                    <form action="/Admin/PublisingHose/Create" method="POST">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1"> Tên nhà xuất bản<span style="color: red">(*)</span></label>
+                                <input type="text" name="Name" class="form-control" placeholder="Nhập tên nhà xuất bản">
+                                <b class="text-danger">@ViewBag.Name</b>
+                                <b class="text-danger">@ViewBag.CheckName</b>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1"> Quốc gia</label>
+                                <input type="text" name="Country" class="form-control" placeholder="Nhập địa chỉ">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Trạng thái</label>
+                                <br>
+                                <input type="radio" name="Status" value="1" checked>Sử dụng
+                                <input type="radio" name="Status" value="2">Không sử dụng
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Địa chỉ</label>
+                                <textarea class="form-control" name="Address" rows="4" cols="50" placeholder="Nhập địa chỉ"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

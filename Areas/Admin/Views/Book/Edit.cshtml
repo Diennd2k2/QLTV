@@ -1,0 +1,124 @@
+﻿@model QLTV.Models.Books
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section class="content" style="padding-top: 20px">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Cập nhật sách</h3>
+                    </div>
+
+                    <form action="/Admin/Book/Edit" method="POST" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div class="row">
+                                <input type="hidden" name="IdBook" value="@Model.IdBook"/>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"> Tên sách<span style="color: red">(*)</span></label>
+                                        <input type="text" name="NameBook" value="@Model.NameBook" class="form-control" placeholder="Nhập tên sách">
+                                        <b class="text-danger">@ViewBag.Name</b>
+                                        <b class="text-danger">@ViewBag.CheckName</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"> Năm suất bản</label>
+                                        <input type="text" name="YearPublising" value="@Model.YearPublising" class="form-control" placeholder="Nhập năm xuất bản">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"> Giá mua<span style="color: red">(*)</span></label>
+                                        <input type="number" name="Price" value="@Model.Price" class="form-control">
+                                        <b class="text-danger">@ViewBag.Price</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"> Giá cho thuê<span style="color: red">(*)</span></label>
+                                        <input type="number" name="LoanPrice" value="@Model.LoanPrice" class="form-control">
+                                        <b class="text-danger">@ViewBag.LoanPrice</b>
+                                        <b class="text-danger">@ViewBag.LoanPriceCheck</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"> Ảnh sách</label>
+                                        <br>
+                                        <img src="~/Books/@Model.UrlImage" width="20%">
+                                        <input type="file" class="form-control-file" name="UrlImages">
+                                        <input type="hidden" name="UrlImage" value="@Model.UrlImage">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"> Số lượng<span style="color: red">(*)</span></label>
+                                        <input type="number" name="Quantitly" value="@Model.Quantitly" class="form-control">
+                                        <b class="text-danger">@ViewBag.Quantitly</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Vị trí kệ <span style="color: red">(*)</span></label>
+                                        <select class="form-control" name="IdBookShelf">
+                                            <option value="">-------------------- Chọn vị trí --------------------</option>
+                                            @foreach (var cate in ViewBag.listBookShelfs)
+                                            {
+                                                <option value="@cate.IdBookShelf" @(Model.IdBookShelf.Equals(cate.IdBookShelf) ? "selected" : "")>@cate.NameBookShelf</option>
+                                            }
+                                        </select>
+                                        <b class="text-danger">@ViewBag.PublisingHouse</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Nhà xuất bản <span style="color: red">(*)</span></label>
+                                        <select class="form-control" name="IdPublisingHouse">
+                                            <option value="">-------------------- Chọn nhà xuất bản --------------------</option>
+                                            @foreach (var cate in ViewBag.listPublisingHose)
+                                            {
+                                                <option value="@cate.IdPublisingHouse" @(Model.IdPublisingHouse.Equals(cate.IdPublisingHouse) ? "selected" : "")>@cate.Name</option>
+                                            }
+                                        </select>
+                                        <b class="text-danger">@ViewBag.PublisingHouse</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Trạng thái</label>
+                                        <br>
+                                        <input type="radio" name="Status" value="1" @(Model.Status == 1 ? "checked" : "")>Sử dụng
+                                        <input type="radio" name="Status" value="2" @(Model.Status == 2 ? "checked" : "")>Không sử dụng
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Mô tả</label>
+                                        <textarea class="form-control" name="DescribeNote" rows="4" cols="50" placeholder="Nhập mô tả sách">@Model.DescribeNote</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
