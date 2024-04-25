@@ -18,6 +18,7 @@
     <Folder Include="wwwroot\Admin\" />
     <Folder Include="wwwroot\Customer\" />
     <Folder Include="wwwroot\Books\" />
+    <Folder Include="wwwroot\Avatars\" />
   </ItemGroup>
 
 </Project>

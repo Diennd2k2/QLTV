@@ -4,6 +4,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+
 <section class="content" style="padding-top: 20px">
     <div class="container-fluid">
         <div class="row">
@@ -13,34 +14,67 @@
                         <h3 class="card-title">Thêm mới độc giả</h3>
                     </div>
 
-                    <form action="/Admin/BookShelfs/Create" method="POST">
+                    <form action="/Admin/Readers/Create" method="POST" enctype="multipart/form-data">
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1"> Tên độc giả<span style="color: red">(*)</span></label>
-                                <input type="text" name="NameReader" class="form-control" placeholder="Nhập tên độc giả">
-                                <b class="text-danger">@ViewBag.Name</b>
-                                <b class="text-danger">@ViewBag.CheckName</b>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="NameReader"> Tên độc giả<span style="color: red">(*)</span></label>
+                                        <input type="text" name="NameReader" class="form-control" placeholder="Nhập tên độc giả">
+                                        <b class="text-danger">@ViewBag.Name</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="AddressReader"> Địa chỉ</label>
+                                        <input type="text" name="AddressReader" class="form-control" placeholder="Nhập địa chỉ">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1"> Số điện thoại<span style="color: red">(*)</span></label>
-                                <input type="text" name="NameReader" class="form-control" placeholder="Nhập số điện thoại">
-                                <b class="text-danger">@ViewBag.Phone</b>
-                                <b class="text-danger">@ViewBag.CheckPhone</b>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="PhoneReader"> Số điện thoại<span style="color: red">(*)</span></label>
+                                        <input type="text" name="PhoneReader" class="form-control" placeholder="Nhập số điện thoại">
+                                        <b class="text-danger">@ViewBag.Phone</b>
+                                        <b class="text-danger">@ViewBag.CheckPhone</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="EmailReader"> Email</label>
+                                        <input type="text" name="EmailReader" class="form-control" placeholder="Nhập email">
+                                        <b class="text-danger">@ViewBag.CheckEmail</b>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Trạng thái</label>
-                                <br>
-                                <input type="radio" name="Status" value="1" checked>Sử dụng
-                                <input type="radio" name="Status" value="2">Không sử dụng
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Avatar"> Ảnh đại diện</label>
+                                        <input type="file" class="form-control-file" name="Avatar">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="DateOfBirth"> Ngày sinh<span style="color: red">(*)</span></label>
+                                        <input type="date" name="DateOfBirth" class="form-control">
+                                        <b class="text-danger">@ViewBag.DateOfBirth</b>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Mô tả</label>
-                                <textarea class="form-control" name="DescribeNote" rows="4" cols="50" placeholder="Nhập mô tả vị trí, đặc điểm"></textarea>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Passport"> Số CMT, CCCD<span style="color: red">(*)</span></label>
+                                        <input type="text" name="Passport" class="form-control" placeholder="Nhập số CMT, CCCD">
+                                        <b class="text-danger">@ViewBag.Passport</b>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -48,4 +82,3 @@
         </div>
     </div>
 </section>
-
