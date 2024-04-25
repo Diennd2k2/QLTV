@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using QLTV.Models;
@@ -16,7 +18,12 @@ namespace QLTV.Areas.Admin.Controllers
     public class ReadersController : Controller
     {
         private PROJECT_QLTVContext context;
-        public ReadersController(PROJECT_QLTVContext context) => this.context = context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ReadersController(PROJECT_QLTVContext context, IHttpContextAccessor httpContextAccessor)
+        {
+            this.context = context;
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         public IActionResult Index(string Search, int page = 1)
         {
@@ -26,6 +33,9 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 list = list.Where(x => x.NameReader.Contains(Search) || x.PhoneReader.Contains(Search) || x.EmailReader.Contains(Search) || x.Passport.Contains(Search)).ToList();
             }
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var userName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            ViewBag.UserName = userName;
             return View(list.OrderByDescending(x => x.CreateDate).ToPagedList(page, limit));
         }
 

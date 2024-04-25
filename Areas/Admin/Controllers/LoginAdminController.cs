@@ -34,7 +34,11 @@ namespace QLTV.Areas.Admin.Controllers
                 var data = context.Accounts.SingleOrDefault(a => a.UserName == model.UserName && a.Password == model.Password && a.Status == 1);
                 if (data != null)
                 {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, data.UserName) }, "SecuritySchema");
+                    var identity = new ClaimsIdentity(new[] { 
+                        new Claim(ClaimTypes.NameIdentifier, data.IdAccount.ToString()),
+                        new Claim(ClaimTypes.Name, data.UserName),
+                        new Claim(ClaimTypes.Role, data.IdRole.ToString()),
+                    }, "SecuritySchema");
                     var principal = new ClaimsPrincipal(identity);
                     HttpContext.SignInAsync("SecuritySchema", principal);
                     return Redirect("/Admin/AdminHome/Index");
