@@ -37,6 +37,7 @@ namespace QLTV.Areas.Admin.Controllers
                     var identity = new ClaimsIdentity(new[] { 
                         new Claim(ClaimTypes.NameIdentifier, data.IdAccount.ToString()),
                         new Claim(ClaimTypes.Name, data.UserName),
+                        new Claim(ClaimTypes.GivenName, data.FullName),
                         new Claim(ClaimTypes.Role, data.IdRole.ToString()),
                     }, "SecuritySchema");
                     var principal = new ClaimsPrincipal(identity);
