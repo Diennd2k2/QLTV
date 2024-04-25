@@ -122,7 +122,7 @@ namespace QLTV.Areas.Admin.Controllers
         {
             Readers data = context.Readers.FirstOrDefault(x => x.IdReader == id);
 
-            return View();
+            return View(data);
         }
 
         [HttpPost]
@@ -141,21 +141,24 @@ namespace QLTV.Areas.Admin.Controllers
                 ViewBag.Phone = "Số điện thoại độc giả không được để trống";
                 check = false;
             }
-            var checkName = dataCheck.FirstOrDefault(p => p.PhoneReader.Equals(model.PhoneReader));
-            if (checkName != null)
+            if (!string.IsNullOrEmpty(model.PhoneReader))
             {
-                ViewBag.CheckPhone = "Số điện thoại độc giả đã tồn tại";
-                check = false;
+                var checkName = dataCheck.FirstOrDefault(p => p.PhoneReader.Equals(model.PhoneReader) && p.IdReader != model.IdReader);
+                if (checkName != null)
+                {
+                    ViewBag.CheckPhone = "Số điện thoại độc giả đã tồn tại";
+                    check = false;
+                }
             }
 
             if (!string.IsNullOrEmpty(model.EmailReader))
             {
-                var checkEmail = dataCheck.FirstOrDefault(x => x.EmailReader.Equals(model.EmailReader));
+                var checkEmail = dataCheck.FirstOrDefault(x => x.EmailReader.Equals(model.EmailReader) && x.IdReader != model.IdReader);
                 if (checkEmail != null)
                 {
                     ViewBag.CheckEmail = "Địa chỉ email đã tồn tại";
+                    check = false;
                 }
-                check = false;
             }
 
             if (string.IsNullOrEmpty(model.Passport))
@@ -166,15 +169,15 @@ namespace QLTV.Areas.Admin.Controllers
 
             if (!string.IsNullOrEmpty(model.Passport))
             {
-                var checkPassport = dataCheck.FirstOrDefault(x => x.Passport.Equals(model.Passport));
+                var checkPassport = dataCheck.FirstOrDefault(x => x.Passport.Equals(model.Passport) && x.IdReader != model.IdReader);
                 if (checkPassport != null)
                 {
                     ViewBag.CheckPassport = "Số CCCD/CMT đã được sử dụng";
+                    check = false;
                 }
-                check = false;
             }
 
-            if (model.DateOfBirth != null)
+            if (model.DateOfBirth == null)
             {
                 ViewBag.DateOfBirth = "Ngày sinh không được để trống";
                 check = false;
@@ -204,8 +207,22 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 Readers data = context.Readers.FirstOrDefault(x => x.IdReader == model.IdReader);
 
-                return View();
+                return View(data);
             }
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var data = context.Readers.FirstOrDefault(x => x.IdReader == id);
+            if (data != null)
+            {
+                context.Readers.Remove(data);
+                context.SaveChanges();
+                TempData["success"] = "Xóa thành công";
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

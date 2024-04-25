@@ -130,3 +130,4 @@ D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\QLTV.pdb
 D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\QLTV.genruntimeconfig.cache
 D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\QLTV.csproj.Up2Date
 D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\QLTV.sourcelink.json
+D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\Razor\Areas\Admin\Views\Readers\Edit.cshtml.g.cs

@@ -1,0 +1,88 @@
+﻿@model QLTV.Models.Readers
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<section class="content" style="padding-top: 20px">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Cập nhật độc giả</h3>
+                    </div>
+
+                    <form action="/Admin/Readers/Edit" method="POST" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div class="row">
+                                <input type="hidden" name="IdReader" value="@Model.IdReader" />
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="NameReader"> Tên độc giả<span style="color: red">(*)</span></label>
+                                        <input type="text" name="NameReader" class="form-control" value="@Model.NameReader" placeholder="Nhập tên độc giả">
+                                        <b class="text-danger">@ViewBag.Name</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="AddressReader"> Địa chỉ</label>
+                                        <input type="text" name="AddressReader" class="form-control" value="@Model.AddressReader" placeholder="Nhập địa chỉ">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="PhoneReader"> Số điện thoại<span style="color: red">(*)</span></label>
+                                        <input type="text" name="PhoneReader" class="form-control" value="@Model.PhoneReader" placeholder="Nhập số điện thoại">
+                                        <b class="text-danger">@ViewBag.Phone</b>
+                                        <b class="text-danger">@ViewBag.CheckPhone</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="EmailReader"> Email</label>
+                                        <input type="text" name="EmailReader" class="form-control" value="@Model.EmailReader" placeholder="Nhập email">
+                                        <b class="text-danger">@ViewBag.CheckEmail</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Avatar"> Ảnh đại diện</label>
+                                        <input type="hidden" name="Avatar" value="@Model.Avatar">
+                                        <input type="file" class="form-control-file" name="Avatar">
+                                        <img src="~/Avatars/@Model.Avatar" alt="@Model.NameReader" width="50px">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="DateOfBirth"> Ngày sinh<span style="color: red">(*)</span></label>
+                                        <input type="date" name="DateOfBirth" value="@Model.DateOfBirth.Value.ToString("yyyy-MM-dd")" class="form-control">
+                                        <b class="text-danger">@ViewBag.DateOfBirth</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Passport"> Số CMT, CCCD<span style="color: red">(*)</span></label>
+                                        <input type="text" name="Passport" class="form-control" value="@Model.Passport" placeholder="Nhập số CMT, CCCD">
+                                        <b class="text-danger">@ViewBag.Passport</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                <a href="/Admin/Readers/Index" class="btn btn-default">Quay lại</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

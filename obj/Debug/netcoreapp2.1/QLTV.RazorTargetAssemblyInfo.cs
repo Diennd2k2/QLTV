@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyProductAttribute("QLTV")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8cc202dea1685bf11ad7962c2b9273bc5b311572")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f8eb100e946c65a21901f67e4b7f14a51c66e4e3")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QLTV.Views")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
