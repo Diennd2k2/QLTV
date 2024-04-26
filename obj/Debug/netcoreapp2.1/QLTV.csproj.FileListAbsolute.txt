@@ -132,3 +132,5 @@ D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\QLTV.csproj.Up2Date
 D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\QLTV.sourcelink.json
 D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\Razor\Areas\Admin\Views\Readers\Edit.cshtml.g.cs
 D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\Razor\Areas\Admin\Views\LibraryCards\Create.cshtml.g.cs
+D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\Razor\Areas\Admin\Views\LibraryCards\Detail.cshtml.g.cs
+D:\SEM_IV\QLTV\QLTV\obj\Debug\netcoreapp2.1\Razor\Areas\Admin\Views\BookLoanPapers\Create.cshtml.g.cs

@@ -1,0 +1,136 @@
+﻿@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<section class="content" style="padding-top: 20px">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Thêm mới độc giả</h3>
+                    </div>
+
+                    <form action="/Admin/BookLoanPapers/Create" method="POST">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="DateLoan"> Ngày mượn<span style="color: red">(*)</span></label>
+                                        <input type="date" name="DateLoan" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="DatePay"> Ngày trả<span style="color: red">(*)</span></label>
+                                        <input type="date" name="DatePay" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="bookFields">
+                                <button type="button" class="btn btn-dark" id="addBook">Thêm Sách</button>
+                                <div class="bookField" style="display: flex; align-items: center">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="bookId1">Sách 1</label>
+                                            <select class="form-control" name="IdBook[]" id="bookId1">
+                                                @foreach (var book in ViewBag.Books)
+                                                {
+                                                    <option value="@book.IdBook">@book.NameBook</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="quantity1">Số Lượng</label>
+                                            <input type="number" class="form-control" name="Quantity[]" id="quantity1" min="1" value="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1" style="margin-top: 15px">
+                                        <button type="button" class="btn btn-danger" class="removeBook">Xóa</button>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="loanPaperDetailsJson" name="LoanPaperDetails" />
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" id="submitForm" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var loanPaperDetails = [];
+    // JavaScript để thêm trường sách khi nhấn nút "Thêm Sách"
+    var bookCount = 1;
+    document.getElementById("addBook").addEventListener("click", function () {
+        bookCount++;
+        var bookField = document.createElement("div");
+        bookField.classList.add("bookField");
+        bookField.style.display = "flex";
+        bookField.style.alignItems = "center";
+        bookField.innerHTML = `
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="bookId${bookCount}">Sách ${bookCount}</label>
+                            <select class="form-control" name="IdBook[]" id="bookId${bookCount}">
+                                @foreach (var book in ViewBag.Books)
+                                {
+                                    <option value="@book.IdBook">@book.NameBook</option>
+                                }
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <label for="quantity${bookCount}">Số Lượng</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                              name="Quantity[]"
+                          id="quantity${bookCount}"
+                          min="1"
+                          value="1"
+                        />
+                      </div>
+                    </div>
+                        <div class="col-md-1" style="margin-top: 15px">
+                      <button type="button" class="removeBook">Xóa</button>
+                    </div>
+                `;
+        document.getElementById("bookFields").appendChild(bookField);
+    });
+
+    // JavaScript để xóa trường sách khi nhấn nút "Xóa"
+    document.getElementById("bookFields").addEventListener("click", function (event) {
+        if (event.target.classList.contains("removeBook")) {
+            event.target.closest(".bookField").remove();
+        }
+    });
+
+    document.getElementById("submitForm").addEventListener("click", function () {
+        loanPaperDetails = []; // Đảm bảo danh sách trống trước khi thêm mới
+        var bookInputs = document.querySelectorAll("select[name='IdBook[]']");
+        var quantityInputs = document.querySelectorAll("input[name='Quantity[]']");
+        for (var i = 0; i < bookInputs.length; i++) {
+            var bookId = bookInputs[i].value;
+            var quantity = quantityInputs[i].value;
+            var loanPaperDetail = {
+                IdBook: bookId,
+                Quantity: quantity
+            };
+            loanPaperDetails.push(loanPaperDetail);
+        }
+        // Cập nhật giá trị của trường ẩn với danh sách loanPaperDetails
+        document.getElementById("loanPaperDetailsJson").value = JSON.stringify(loanPaperDetails);
+    });
+
+</script>

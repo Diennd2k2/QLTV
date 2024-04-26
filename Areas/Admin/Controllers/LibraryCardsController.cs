@@ -110,5 +110,11 @@ namespace QLTV.Areas.Admin.Controllers
                 return View();
             }
         }
+
+        public IActionResult Detail(int idReader)
+        {
+            LibraryCards data = context.LibraryCards.FirstOrDefault(x => x.IdReader == idReader);
+            return View(data);
+        }
     }
 }
