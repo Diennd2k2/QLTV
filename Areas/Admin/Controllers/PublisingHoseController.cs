@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using QLTV.Models;
 using X.PagedList;
 
@@ -14,22 +17,34 @@ namespace QLTV.Areas.Admin.Controllers
     public class PublisingHoseController : Controller
     {
         private PROJECT_QLTVContext context;
-
-        public PublisingHoseController(PROJECT_QLTVContext context) => this.context = context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IToastNotification _toastNotification;
+        public PublisingHoseController(PROJECT_QLTVContext context, IHttpContextAccessor httpContextAccessor, IToastNotification toastrNotification)
+        {
+            this.context = context;
+            _httpContextAccessor = httpContextAccessor;
+            _toastNotification = toastrNotification;
+        }
 
         public IActionResult Index(string Search, int page = 1)
         {
             int limit = 5;
-            var list = context.PublisingHouse.OrderByDescending(c => c.CreateDate).ToPagedList(page, limit);
+            var list = context.PublisingHouse.OrderByDescending(c => c.CreateDate).ToList();
             if (!string.IsNullOrEmpty(Search))
             {
-                list = context.PublisingHouse.Where(x => x.IdPublisingHouse == int.Parse(Search) || x.Name.Contains(Search) || x.Address.Contains(Search) || x.Country.Contains(Search)).OrderByDescending(x => x.CreateDate).ToPagedList(page, limit);
+                list = list.Where(x => x.IdPublisingHouse == int.Parse(Search) || x.Name.Contains(Search) || x.Address.Contains(Search) || x.Country.Contains(Search)).ToList();
             }
-            return View(list);
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
+            return View(list.OrderByDescending(x => x.CreateDate).ToPagedList(page, limit));
         }
 
         public IActionResult Create()
         {
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
             return View();
         }
 
@@ -55,11 +70,14 @@ namespace QLTV.Areas.Admin.Controllers
                 model.IdUserCreate = 1;
                 context.PublisingHouse.Add(model);
                 context.SaveChanges();
-                TempData["success"] = "Thêm mới thành công";
+                _toastNotification.AddSuccessToastMessage("Thêm mới thành công");
                 return RedirectToAction("Index");
             }
             else
             {
+                var claims = _httpContextAccessor.HttpContext.User.Claims;
+                var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
                 return View();
             }
         }
@@ -91,11 +109,14 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 context.PublisingHouse.Update(model);
                 context.SaveChanges();
-                TempData["success"] = "Cập nhật thành công";
+                _toastNotification.AddSuccessToastMessage("Cập nhật thành công");
                 return RedirectToAction("Index");
             }
             else
             {
+                var claims = _httpContextAccessor.HttpContext.User.Claims;
+                var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
                 PublisingHouse publisingHouse = context.PublisingHouse.FirstOrDefault(x => x.IdPublisingHouse == model.IdPublisingHouse);
                 return View(publisingHouse);
             }
@@ -107,14 +128,14 @@ namespace QLTV.Areas.Admin.Controllers
             var data = context.PublisingHouse.FirstOrDefault(x => x.IdPublisingHouse == id);
             if (checkBook != null)
             {
-                TempData["eror"] = "Nhà xuất bản đã được thêm sách không thể xoá!";
+                _toastNotification.AddErrorToastMessage("Nhà xuất bản đã được thêm sách không thể xoá");
                 return RedirectToAction("Index");
             }
             if (data != null)
             {
                 context.PublisingHouse.Remove(data);
                 context.SaveChanges();
-                TempData["success"] = "Xóa thành công";
+                _toastNotification.AddSuccessToastMessage("Xoá thành công");
                 return RedirectToAction("Index");
             }
 

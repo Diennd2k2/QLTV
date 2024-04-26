@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NToastNotify;
 using QLTV.Models;
 using X.PagedList;
 
@@ -16,8 +19,14 @@ namespace QLTV.Areas.Admin.Controllers
     public class BookController : Controller
     {
         private PROJECT_QLTVContext context;
-
-        public BookController(PROJECT_QLTVContext context) => this.context = context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IToastNotification _toastNotification;
+        public BookController(PROJECT_QLTVContext context, IHttpContextAccessor httpContextAccessor, IToastNotification toastrNotification)
+        {
+            this.context = context;
+            _httpContextAccessor = httpContextAccessor;
+            _toastNotification = toastrNotification;
+        }
 
         public IActionResult Index(string Search, int IdBookShelfs, int IdPublisingHose, int page = 1)
         {
@@ -35,7 +44,9 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 list = list.Where(x => x.IdPublisingHouse == IdBookShelfs).ToList();
             }
-
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
             var listBookShelfs = context.BookShelfs.OrderByDescending(x => x.CreateDate).ToList();
             ViewBag.listBookShelfs = listBookShelfs;
             var listPublisingHose = context.PublisingHouse.OrderByDescending(x => x.CreateDate).ToList();
@@ -45,6 +56,9 @@ namespace QLTV.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
             var listBookShelfs = context.BookShelfs.Where(x => x.Status == 1).ToList();
             ViewBag.listBookShelfs = listBookShelfs;
             var listPublisingHose = context.PublisingHouse.Where(x => x.Status == 1).ToList();
@@ -127,11 +141,14 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 context.Books.Add(model);
                 context.SaveChanges();
-                TempData["success"] = "Thêm mới thành công";
+                _toastNotification.AddSuccessToastMessage("Thêm mới thành công");
                 return RedirectToAction("Index");
             }
             else
             {
+                var claims = _httpContextAccessor.HttpContext.User.Claims;
+                var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
                 var listBookShelfs = context.BookShelfs.Where(x => x.Status == 1).ToList();
                 ViewBag.listBookShelfs = listBookShelfs;
                 var listPublisingHose = context.PublisingHouse.Where(x => x.Status == 1).ToList();
@@ -142,6 +159,9 @@ namespace QLTV.Areas.Admin.Controllers
 
         public IActionResult Edit(int id)
         {
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
             Books data = context.Books.FirstOrDefault(x => x.IdBook == id);
             var listBookShelfs = context.BookShelfs.Where(x => x.Status == 1).ToList();
             ViewBag.listBookShelfs = listBookShelfs;
@@ -220,11 +240,14 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 context.Books.Update(model);
                 context.SaveChanges();
-                TempData["success"] = "Cập nhật thành công";
+                _toastNotification.AddSuccessToastMessage("Cập nhật thành công");
                 return RedirectToAction("Index");
             }
             else
             {
+                var claims = _httpContextAccessor.HttpContext.User.Claims;
+                var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
                 Books data = context.Books.FirstOrDefault(x => x.IdBook == model.IdBook);
                 var listBookShelfs = context.BookShelfs.Where(x => x.Status == 1).ToList();
                 ViewBag.listBookShelfs = listBookShelfs;

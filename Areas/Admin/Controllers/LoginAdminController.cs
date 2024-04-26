@@ -32,7 +32,7 @@ namespace QLTV.Areas.Admin.Controllers
         {
             if (string.IsNullOrEmpty(model.UserName) && string.IsNullOrEmpty(model.Password))
             {
-                ViewBag.Erorr = "Vui lòng nhập email và mật khẩu!";
+                _toastNotification.AddErrorToastMessage("Vui lòng nhập tên đăng nhập và mật khẩu");
                 return View();
             }
             else
@@ -54,7 +54,6 @@ namespace QLTV.Areas.Admin.Controllers
                 else
                 {
                     _toastNotification.AddErrorToastMessage("Tài khoản hoặc mật khẩu không chính xác");
-                    ViewBag.Erorr = "Sai tài khoản hoặc mật khẩu!";
                     return View();
                 }
             }

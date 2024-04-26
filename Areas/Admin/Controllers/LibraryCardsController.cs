@@ -26,6 +26,9 @@ namespace QLTV.Areas.Admin.Controllers
 
         public IActionResult Create(int idReader)
         {
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
             Readers data = context.Readers.FirstOrDefault(x => x.IdReader == idReader);
             return View(data);
         }
@@ -101,6 +104,9 @@ namespace QLTV.Areas.Admin.Controllers
             }
             else
             {
+                var claims = _httpContextAccessor.HttpContext.User.Claims;
+                var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
                 return View();
             }
         }
