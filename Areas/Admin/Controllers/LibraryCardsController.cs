@@ -6,6 +6,7 @@ using System.IO;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using NToastNotify;
 
 namespace QLTV.Areas.Admin.Controllers
 {
@@ -15,10 +16,12 @@ namespace QLTV.Areas.Admin.Controllers
     {
         private PROJECT_QLTVContext context;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public LibraryCardsController(PROJECT_QLTVContext context, IHttpContextAccessor httpContextAccessor)
+        private readonly IToastNotification _toastNotification;
+        public LibraryCardsController(PROJECT_QLTVContext context, IHttpContextAccessor httpContextAccessor, IToastNotification toastrNotification)
         {
             this.context = context;
             _httpContextAccessor = httpContextAccessor;
+            _toastNotification = toastrNotification;
         }
 
         public IActionResult Create(int idReader)
@@ -93,13 +96,19 @@ namespace QLTV.Areas.Admin.Controllers
                 model.IdUserCreate = int.Parse(idCreate);
                 context.LibraryCards.Add(model);
                 context.SaveChanges();
-                TempData["success"] = "Thêm mới thành công";
+                _toastNotification.AddSuccessToastMessage("Thêm mới thành công");
                 return RedirectToAction("Index", "Readers");
             }
             else
             {
                 return View();
             }
+        }
+
+        public IActionResult Detail(int idReader)
+        {
+            LibraryCards data = context.LibraryCards.FirstOrDefault(x => x.IdReader == idReader);
+            return View(data);
         }
     }
 }

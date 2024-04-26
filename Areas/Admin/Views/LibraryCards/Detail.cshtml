@@ -1,6 +1,6 @@
-﻿@model QLTV.Models.Readers
+﻿@model QLTV.Models.LibraryCards
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Detail";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -10,26 +10,21 @@
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Thêm mới thẻ thư viện</h3>
+                        <h3 class="card-title">Thông tin thẻ thư viện</h3>
                     </div>
-
-                    <form action="/Admin/LibraryCards/Create" method="POST" enctype="multipart/form-data">
                         <div class="card-body">
                             <div class="row">
                                 <input type="hidden" name="IdReader" value="@Model.IdReader" />
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="IdLibraryCard"> Mã thẻ<span style="color: red">(*)</span></label>
-                                        <input type="text" name="IdLibraryCard" class="form-control" placeholder="Nhập mã thẻ">
-                                        <b class="text-danger">@ViewBag.IdLibraryCard1</b>
-                                        <b class="text-danger">@ViewBag.IdLibraryCard2</b>
+                                        <input type="text" name="IdLibraryCard" value="@Model.IdLibraryCard" disabled class="form-control" placeholder="Nhập mã thẻ">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="FullName"> Tên độc giả<span style="color: red">(*)</span></label>
-                                        <input type="text" name="FullName" class="form-control" value="@Model.NameReader" placeholder="Nhập tên độc giả">
-                                        <b class="text-danger">@ViewBag.Name</b>
+                                        <input type="text" name="FullName" disabled class="form-control" value="@Model.FullName" placeholder="Nhập tên độc giả">
                                     </div>
                                 </div>
                             </div>
@@ -38,15 +33,12 @@
                                     <div class="form-group">
                                         <label for="Passport"> Số CMT, CCCD<span style="color: red">(*)</span></label>
                                         <input type="text" name="Passport" class="form-control" value="@Model.Passport" placeholder="Nhập số CMT, CCCD">
-                                        <b class="text-danger">@ViewBag.Passport</b>
-                                        <b class="text-danger">@ViewBag.CheckPassport</b>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="DateOfBirth"> Ngày sinh<span style="color: red">(*)</span></label>
-                                        <input type="date" name="DateOfBirth" value="@Model.DateOfBirth.Value.ToString("yyyy-MM-dd")" class="form-control">
-                                        <b class="text-danger">@ViewBag.DateOfBirth</b>
+                                        <input type="date" name="DateOfBirth" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -55,19 +47,17 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="Avrtar"> Ảnh đại diện</label>
-                                            <input type="hidden" name="Avrtar" value="@Model.Avatar">
-                                            <input type="file" class="form-control-file" name="Avrtar">
-                                            <img style="margin-top: 20px" src="~/Avatars/@Model.Avatar" alt="@Model.NameReader" width="100px" height="100px">
+                                            <input type="hidden" name="Avrtar" value="@Model.Avrtar">
+                                            <img style="margin-top: 20px" src="~/Avatars/@Model.Avrtar" alt="@Model.FullName" width="100px" height="100px">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Lưu</button>
                             <a href="/Admin/Readers/Index" class="btn btn-default">Quay lại</a>
+                            <a href="/Admin/Readers/Index" class="btn btn-danger">Xóa</a>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>

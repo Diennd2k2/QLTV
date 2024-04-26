@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NToastNotify;
+using QLTV.Areas.Admin.Models;
 using QLTV.Models;
 using X.PagedList;
 
@@ -31,7 +32,19 @@ namespace QLTV.Areas.Admin.Controllers
         public IActionResult Index(string Search, int page = 1)
         {
             int limit = 5;
-            var list = context.Readers.ToList();
+            List<ReadersModelView> list = new List<ReadersModelView>();
+            list = context.Readers.Select(x => new ReadersModelView
+            {
+                IdReader = x.IdReader,
+                NameReader = x.NameReader,
+                PhoneReader = x.PhoneReader,
+                EmailReader = x.EmailReader,
+                Passport = x.Passport,
+                AddressReader = x.AddressReader,
+                Avatar = x.Avatar,
+                DateOfBirth = x.DateOfBirth,
+                CreateDate = x.CreateDate
+            }).ToList();
             if (!string.IsNullOrEmpty(Search))
             {
                 list = list.Where(x => x.NameReader.Contains(Search) || x.PhoneReader.Contains(Search) || x.EmailReader.Contains(Search) || x.Passport.Contains(Search)).ToList();
@@ -39,6 +52,18 @@ namespace QLTV.Areas.Admin.Controllers
             var claims = _httpContextAccessor.HttpContext.User.Claims;
             var userName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             ViewBag.UserName = userName;
+            foreach (var item in list)
+            {
+                var idCard = context.LibraryCards.FirstOrDefault(x => x.IdReader == item.IdReader);
+                if(idCard != null)
+                {
+                    item.isCard = true;
+                }
+                else
+                {
+                    item.isCard = false;
+                }
+            }
             return View(list.OrderByDescending(x => x.CreateDate).ToPagedList(page, limit));
         }
 
