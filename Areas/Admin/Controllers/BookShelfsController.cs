@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using QLTV.Models;
 using X.PagedList;
 
@@ -15,8 +17,14 @@ namespace QLTV.Areas.Admin.Controllers
     public class BookShelfsController : Controller
     {
         private PROJECT_QLTVContext context;
-
-        public BookShelfsController(PROJECT_QLTVContext context) => this.context = context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IToastNotification _toastNotification;
+        public BookShelfsController(PROJECT_QLTVContext context, IHttpContextAccessor httpContextAccessor, IToastNotification toastrNotification)
+        {
+            this.context = context;
+            _httpContextAccessor = httpContextAccessor;
+            _toastNotification = toastrNotification;
+        }
 
         public IActionResult Index(string Search, int page = 1)
         {
@@ -26,11 +34,17 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 list = context.BookShelfs.Where(x => x.IdBookShelf == int.Parse(Search) || x.NameBookShelf.Contains(Search) || x.DescribeNote.Contains(Search)).OrderByDescending(x => x.CreateDate).ToPagedList(page, limit);
             }
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
             return View(list);
         }
 
         public IActionResult Create()
         {
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
             return View();
         }
 
@@ -56,17 +70,23 @@ namespace QLTV.Areas.Admin.Controllers
                 model.IdUserCreate = 1;
                 context.BookShelfs.Add(model);
                 context.SaveChanges();
-                TempData["success"] = "Thêm mới thành công";
+                _toastNotification.AddSuccessToastMessage("Thêm mới thành công");
                 return RedirectToAction("Index");
             }
             else
             {
+                var claims = _httpContextAccessor.HttpContext.User.Claims;
+                var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
                 return View();
             }
         }
 
         public IActionResult Edit(int id)
         {
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
             BookShelfs bookShelfs = context.BookShelfs.FirstOrDefault(x => x.IdBookShelf == id);
             return View(bookShelfs);
         }
@@ -92,11 +112,14 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 context.BookShelfs.Update(model);
                 context.SaveChanges();
-                TempData["success"] = "Cập nhật thành công";
+                _toastNotification.AddSuccessToastMessage("Cập nhật thành công");
                 return RedirectToAction("Index");
             }
             else
             {
+                var claims = _httpContextAccessor.HttpContext.User.Claims;
+                var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                ViewBag.User = context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
                 BookShelfs bookShelfs = context.BookShelfs.FirstOrDefault(x => x.IdBookShelf == model.IdBookShelf);
                 return View(bookShelfs);
             }
@@ -108,17 +131,16 @@ namespace QLTV.Areas.Admin.Controllers
             var data = context.BookShelfs.FirstOrDefault(x => x.IdBookShelf == id);
             if (checkBook != null)
             {
-                TempData["eror"] = "Kệ sách đã được thêm sách không thể xoá!";
+                _toastNotification.AddErrorToastMessage("Kệ sách đã được thêm sách không thể xoá");
                 return RedirectToAction("Index");
             }
             if (data != null)
             {
                 context.BookShelfs.Remove(data);
                 context.SaveChanges();
-                TempData["success"] = "Xóa thành công";
+                _toastNotification.AddSuccessToastMessage("Xóa thành công");
                 return RedirectToAction("Index");
             }
-
             return RedirectToAction("Index");
         }
     }

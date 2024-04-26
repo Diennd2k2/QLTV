@@ -32,12 +32,6 @@
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
-                @if (ViewBag.Erorr != null)
-                {
-                    <div class="alert alert-danger" role="alert">
-                        @Html.Raw(ViewBag.Erorr)
-                    </div>
-                }
                 <form class="login100-form validate-form" action="/Admin/LoginAdmin/Login" method="POST">
                     <span class="login100-form-title p-b-43">
                         Chào mừng đến với trang quản trị
