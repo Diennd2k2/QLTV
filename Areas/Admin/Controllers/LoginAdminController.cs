@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using QLTV.Models;
 
 namespace QLTV.Areas.Admin.Controllers
@@ -12,8 +13,13 @@ namespace QLTV.Areas.Admin.Controllers
     public class LoginAdminController : Controller
     {
         private PROJECT_QLTVContext context;
+        private readonly IToastNotification _toastNotification;
 
-        public LoginAdminController(PROJECT_QLTVContext context) => this.context = context;
+        public LoginAdminController(PROJECT_QLTVContext context, IToastNotification toastrNotification)
+        {
+            this.context = context;
+            _toastNotification = toastrNotification;
+        }
 
         public IActionResult Login(string returnUrl)
         {
@@ -42,10 +48,12 @@ namespace QLTV.Areas.Admin.Controllers
                     }, "SecuritySchema");
                     var principal = new ClaimsPrincipal(identity);
                     HttpContext.SignInAsync("SecuritySchema", principal);
+                    _toastNotification.AddSuccessToastMessage("Đăng nhập thành công");
                     return Redirect("/Admin/AdminHome/Index");
                 }
                 else
                 {
+                    _toastNotification.AddErrorToastMessage("Tài khoản hoặc mật khẩu không chính xác");
                     ViewBag.Erorr = "Sai tài khoản hoặc mật khẩu!";
                     return View();
                 }
@@ -56,6 +64,7 @@ namespace QLTV.Areas.Admin.Controllers
         {
             var logout = HttpContext.SignOutAsync("QLTVSecurityScheme");
             HttpContext.Session.Remove("useradmin");
+            _toastNotification.AddSuccessToastMessage("Đăng xuất thành công");
             return RedirectToAction("Login");
         }
     }

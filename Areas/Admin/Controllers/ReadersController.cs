@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NToastNotify;
 using QLTV.Models;
 using X.PagedList;
 
@@ -19,10 +20,12 @@ namespace QLTV.Areas.Admin.Controllers
     {
         private PROJECT_QLTVContext context;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ReadersController(PROJECT_QLTVContext context, IHttpContextAccessor httpContextAccessor)
+        private readonly IToastNotification _toastNotification;
+        public ReadersController(PROJECT_QLTVContext context, IHttpContextAccessor httpContextAccessor, IToastNotification toastrNotification)
         {
             this.context = context;
             _httpContextAccessor = httpContextAccessor;
+            _toastNotification = toastrNotification;
         }
 
         public IActionResult Index(string Search, int page = 1)
@@ -119,7 +122,7 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 context.Readers.Add(model);
                 context.SaveChanges();
-                TempData["success"] = "Thêm mới thành công";
+                _toastNotification.AddSuccessToastMessage("Thêm mới thành công");
                 return RedirectToAction("Index");
             }
             else
@@ -210,7 +213,7 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 context.Readers.Update(model);
                 context.SaveChanges();
-                TempData["success"] = "Cập nhật thành công";
+                _toastNotification.AddSuccessToastMessage("Cập nhật thành công");
                 return RedirectToAction("Index");
             }
             else
@@ -228,7 +231,7 @@ namespace QLTV.Areas.Admin.Controllers
             {
                 context.Readers.Remove(data);
                 context.SaveChanges();
-                TempData["success"] = "Xóa thành công";
+                _toastNotification.AddSuccessToastMessage("Xóa thành công");
                 return RedirectToAction("Index");
             }
 

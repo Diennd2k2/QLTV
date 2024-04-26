@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using NToastNotify;
 using QLTV.Models;
 
 namespace QLTV
@@ -53,6 +54,13 @@ namespace QLTV
             {
                 options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
             });
+            services.AddMvc().AddNToastNotifyNoty(new NotyOptions
+            {
+                ProgressBar = true,
+                Timeout = 1000,
+                Theme = "metroui",
+                Layout = "topRight",
+            });
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(1);
@@ -82,6 +90,7 @@ namespace QLTV
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseNToastNotify();
             app.UseSession();
 
             app.UseMvc(routes =>

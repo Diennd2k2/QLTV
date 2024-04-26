@@ -278,7 +278,7 @@
     <script src="~/admin/plugins/jquery-mapael/maps/usa_states.min.js"></script>
     <!-- ChartJS -->
     <script src="~/admin/plugins/chart.js/Chart.min.js"></script>
-
+    @await Component.InvokeAsync("NToastNotify")
     @RenderSection("Scripts", required: false)
 </body>
 </html>
