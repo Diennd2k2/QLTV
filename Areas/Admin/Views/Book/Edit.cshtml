@@ -54,7 +54,10 @@
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"> Ảnh sách</label>
                                         <br>
-                                        <img src="~/Books/@Model.UrlImage" width="20%">
+                                        @if (Model.UrlImage != null)
+                                        {
+                                            <img src="~/Accounts/@Model.UrlImage" width="20%">
+                                        }
                                         <input type="file" class="form-control-file" name="UrlImages">
                                         <input type="hidden" name="UrlImage" value="@Model.UrlImage">
                                     </div>

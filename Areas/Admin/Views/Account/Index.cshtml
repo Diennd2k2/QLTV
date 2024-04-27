@@ -49,36 +49,40 @@
                         <table class="table table-bordered" style="margin-top: 20px">
                             <thead>
                                 <tr>
-                                    <th>Mã nhân viên</th>
-                                    <th>Tên nhân viên</th>
-                                    <th width="10%">Ảnh đại diện</th>
-                                    <th>Tên đăng nhập</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Chức vụ</th>
-                                    <th>Trạng thái</th>
-                                    <th style="width: 7%">Công cụ</th>
+                                    <th style="text-align: center">Mã nhân viên</th>
+                                    <th style="text-align: center">Tên nhân viên</th>
+                                    <th style="text-align: center" width="10%">Ảnh đại diện</th>
+                                    <th style="text-align: center">Tên đăng nhập</th>
+                                    <th style="text-align: center">Ngày sinh</th>
+                                    <th style="text-align: center">Chức vụ</th>
+                                    <th style="text-align: center">Trạng thái</th>
+                                    <th style="text-align: center" width="10%">Công cụ</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var acc in Model)
                                 {
                                     <tr>
-                                        <td>@acc.IdAccount</td>
+                                        <td style="text-align: center">@acc.IdAccount</td>
                                         <td>@acc.FullName</td>
-                                        <td>
+                                        <td style="text-align: center">
                                             @if (acc.Avatar != null)
                                             {
-                                                <img src="~/Accounts/@acc.Avatar" alt="@acc.FullName" width="60%">
+                                                <div width="60%">
+                                                    <img style="width: 100%; overflow: hidden; border-radius: 50%" src="~/Accounts/@acc.Avatar" alt="@acc.FullName">
+                                                </div>
                                             }
                                             else
                                             {
-                                                <img src="~/images/userDf.jpg" alt="@acc.FullName" width="60%">
+                                                <div width="60%">
+                                                    <img style="width: 100%; overflow: hidden; border-radius: 50%" src="~/images/userDf.jpg" alt="@acc.FullName">
+                                                </div> 
                                             }
                                         </td>
                                         <td>@acc.UserName</td>
-                                        <td>@String.Format("{0:dd/MM/yyyy}", acc.DateOfBirth)</td>
+                                        <td style="text-align: center">@String.Format("{0:dd/MM/yyyy}", acc.DateOfBirth)</td>
                                         <td>@acc.IdRoleNavigation.NameRole</td>
-                                        <td>
+                                        <td style="text-align: center">
                                             @if (acc.Status == 1)
                                             {
                                                 <span class="badge bg-success">Hoạt động</span>
@@ -89,7 +93,7 @@
                                             }
 
                                         </td>
-                                        <td>
+                                        <td style="text-align: center">
                                             <a style="color: green" href="/Admin/Account/Edit?id=@acc.IdAccount" title="Sửa thông tin"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <a style="color: red;padding-left: 20px" href="/Admin/Account/Delete?id=@acc.IdAccount" title="Xóa bản ghi"><i class="fa fa-trash" aria-hidden="true"></i></a>
 

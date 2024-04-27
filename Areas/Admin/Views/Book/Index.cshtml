@@ -73,33 +73,46 @@
                     <table class="table table-bordered" style="margin-top: 20px">
                         <thead>
                             <tr>
-                                <th>Mã sách</th>
-                                <th>Tên sách</th>
-                                <th width="10%">Ảnh sách</th>
-                                <th>Giá mua</th>
-                                <th>Giá cho thuê</th>
-                                <th>Số lượng</th>
-                                <th>Nhà xuất bản</th>
-                                <th>Vị trí kệ</th>
-                                <th>Năm xuất bản</th>
-                                <th>Trạng thái</th>
-                                <th style="width: 7%">Công cụ</th>
+                                <th style="text-align: center">Mã sách</th>
+                                <th style="text-align: center">Tên sách</th>
+                                <th style="text-align: center; width: 10%">Ảnh sách</th>
+                                <th style="text-align: center">Giá mua</th>
+                                <th style="text-align: center">Giá cho thuê</th>
+                                <th style="text-align: center">Số lượng</th>
+                                <th style="text-align: center">Nhà xuất bản</th>
+                                <th style="text-align: center">Vị trí kệ</th>
+                                <th style="text-align: center">Năm xuất bản</th>
+                                <th style="text-align: center">Trạng thái</th>
+                                <th style="text-align: center; width: 10%">Công cụ</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var book in Model)
                             {
                                 <tr>
-                                    <td>@book.IdBook</td>
+                                    <td style="text-align: center">@book.IdBook</td>
                                     <td>@book.NameBook</td>
-                                    <td><img src="~/Books/@book.UrlImage" alt="@book.NameBook" width="60%"></td>
-                                    <td>@book.Price VNĐ</td>
-                                    <td>@book.LoanPrice VNĐ</td>
-                                    <td>@book.Quantitly</td>
+                                    <td style="text-align: center">
+                                        @if (book.UrlImage != null)
+                                        {
+                                            <div width="60%">
+                                                <img style="width: 100%; overflow: hidden; border-radius: 50%" src="~/Books/@book.UrlImage" alt="@book.NameBook">
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div width="60%">
+                                                <img style="width: 100%; overflow: hidden; border-radius: 50%" src="~/images/bookdf.png" alt="@book.NameBook">
+                                            </div>
+                                        }
+                                    </td>
+                                    <td style="text-align: right">@book.Price</td>
+                                    <td style="text-align: right">@book.LoanPrice</td>
+                                    <td style="text-align: right">@book.Quantitly</td>
                                     <td>@book.IdPublisingHouseNavigation.Name</td>
                                     <td>@book.IdBookShelfNavigation.NameBookShelf</td>
-                                    <td>@book.YearPublising</td>
-                                    <td>
+                                    <td style="text-align: center">@book.YearPublising</td>
+                                    <td style="text-align: center">
                                         @if (book.Status == 1)
                                         {
                                             <span class="badge bg-success">Sử dụng</span>
@@ -110,7 +123,7 @@
                                         }
 
                                     </td>
-                                    <td>
+                                    <td style="text-align: center">
                                         <a style="color: green" href="/Admin/Book/Edit?id=@book.IdBook" title="Sửa thông tin"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                         <a style="color: red;padding-left: 20px" href="/Admin/Book/Delete?id=@book.IdBook" title="Xóa bản ghi"><i class="fa fa-trash" aria-hidden="true"></i></a>
 

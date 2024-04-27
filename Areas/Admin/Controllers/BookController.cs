@@ -256,5 +256,24 @@ namespace QLTV.Areas.Admin.Controllers
                 return View(data);
             }
         }
+
+        public IActionResult Delete(int id)
+        {
+            var checkBook = context.LoanPaperDetails.FirstOrDefault(x => x.IdBook == id);
+            var data = context.Books.FirstOrDefault(x => x.IdBook == id);
+            if (checkBook != null)
+            {
+                _toastNotification.AddErrorToastMessage("Sách đã được mượn không thể xoá");
+                return RedirectToAction("Index");
+            }
+            if (data != null)
+            {
+                context.Books.Remove(data);
+                context.SaveChanges();
+                _toastNotification.AddSuccessToastMessage("Xóa thành công");
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
