@@ -6,6 +6,7 @@ using QLTV.Areas.Admin.Models;
 using QLTV.Models;
 using System;
 using System.Linq;
+using System.Security.Claims;
 
 namespace QLTV.Areas.Admin.Controllers
 {
@@ -26,11 +27,18 @@ namespace QLTV.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = _context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
             return View();
         }
 
         public IActionResult Create()
         {
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.User = _context.Accounts.FirstOrDefault(x => x.IdAccount == Int32.Parse(idUsse));
+
             var libraryCards = _context.LibraryCards.ToList();
             var books = _context.Books.ToList();
             var readers = _context.Readers.ToList();
@@ -42,41 +50,44 @@ namespace QLTV.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(BookLoanPapersModelView model)
+        public IActionResult Create([FromBody] BookLoanPapersModelView model)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    var loanPaper = new BookLoanPapers
-            //    {
-            //        IdLibraryCard = model.IdLibraryCard,
-            //        IdReader = model.IdReader,
-            //        DateLoan = model.DateLoan,
-            //        DatePay = model.DatePay,
-            //        Status = model.Status,
-            //        IdUserCreate = model.IdUserCreate
-            //    };
+            var claims = _httpContextAccessor.HttpContext.User.Claims;
+            var idUsse = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var libraryCard = _context.LibraryCards.FirstOrDefault(x => x.IdLibraryCard == model.IdLibraryCard);
+            if (ModelState.IsValid)
+            {
+                var loanPaper = new BookLoanPapers
+                {
+                    IdLibraryCard = model.IdLibraryCard,
+                    IdReader = libraryCard.IdReader,
+                    DateLoan = model.DateLoan,
+                    DatePay = model.DatePay,
+                    Status = 1,
+                    IdUserCreate = int.Parse(idUsse),
+                };
 
-            //    _context.BookLoanPapers.Add(loanPaper);
-            //    _context.SaveChanges();
-            //    foreach (var book in model.LoanPaperDetails)
-            //    {
-            //        var loanDetail = new LoanPaperDetails
-            //        {
-            //            IdLoanPaper = loanPaper.IdLoanPaper,
-            //            IdBook = book.IdBook,
-            //            Quantity = book.Quantity,
-            //            Depositis = book.Depositis,
-            //            LoanPrice = book.LoanPrice
-            //        };
+                _context.BookLoanPapers.Add(loanPaper);
+                _context.SaveChanges();
+                foreach (var book in model.LoanPaperDetails)
+                {
+                    var loanDetail = new LoanPaperDetails
+                    {
+                        IdLoanPaper = loanPaper.IdLoanPaper,
+                        IdBook = book.IdBook,
+                        Quantity = book.Quantity,
+                        Depositis = book.Depositis,
+                        LoanPrice = book.LoanPrice
+                    };
 
-            //        _context.LoanPaperDetails.Add(loanDetail);
-            //    }
-            //    _context.SaveChanges();
+                    _context.LoanPaperDetails.Add(loanDetail);
+                }
+                _context.SaveChanges();
 
-            //    return RedirectToAction("Index");
-            //}
+                return RedirectToAction("Index");
+            }
 
-            return null;
+            return View(model);
         }
 
     }

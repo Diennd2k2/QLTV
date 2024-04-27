@@ -13,9 +13,20 @@
                         <h3 class="card-title">Thêm mới độc giả</h3>
                     </div>
 
-                    <form action="/Admin/BookLoanPapers/Create" method="POST">
+                    <form id="myForm">
                         <div class="card-body">
                             <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="DateLoan"> Chọn thẻ thư viện<span style="color: red">(*)</span></label>
+                                        <select class="form-control" name="IdLibraryCard" id="IdLibraryCard">
+                                                @foreach (var card in ViewBag.LibraryCards)
+                                                {
+                                                    <option value="@card.IdLibraryCard">@card.FullName</option>
+                                                }
+                                            </select>
+                                    </div>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="DateLoan"> Ngày mượn<span style="color: red">(*)</span></label>
@@ -53,11 +64,10 @@
                                         <button type="button" class="btn btn-danger" class="removeBook">Xóa</button>
                                     </div>
                                 </div>
-                                <input type="hidden" id="loanPaperDetailsJson" name="LoanPaperDetails" />
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" id="submitForm" class="btn btn-primary">Lưu</button>
+                            <button onclick="submitForm()" class="btn btn-primary">Lưu</button>
                         </div>
                     </form>
                 </div>
@@ -116,8 +126,16 @@
         }
     });
 
-    document.getElementById("submitForm").addEventListener("click", function () {
-        loanPaperDetails = []; // Đảm bảo danh sách trống trước khi thêm mới
+     function submitForm() {
+        var form = document.getElementById('myForm');
+        var formData = new FormData(form);
+        var jsonData = {};
+
+        formData.forEach(function (value, key) {
+            jsonData[key] = value;
+        });
+
+        var loanPaperDetails = [];
         var bookInputs = document.querySelectorAll("select[name='IdBook[]']");
         var quantityInputs = document.querySelectorAll("input[name='Quantity[]']");
         for (var i = 0; i < bookInputs.length; i++) {
@@ -129,8 +147,12 @@
             };
             loanPaperDetails.push(loanPaperDetail);
         }
-        // Cập nhật giá trị của trường ẩn với danh sách loanPaperDetails
-        document.getElementById("loanPaperDetailsJson").value = JSON.stringify(loanPaperDetails);
-    });
+        jsonData['LoanPaperDetails'] = loanPaperDetails;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/Admin/BookLoanPapers/Create", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(jsonData));
+    }
 
 </script>
