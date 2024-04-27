@@ -12,7 +12,6 @@
                     <div class="card-header">
                         <h3 class="card-title">Thêm mới độc giả</h3>
                     </div>
-
                     <form id="myForm">
                         <div class="card-body">
                             <div class="row">
@@ -145,6 +144,7 @@
     });
 
      function submitForm() {
+        event.preventDefault();
         var form = document.getElementById('myForm');
         var formData = new FormData(form);
         var jsonData = {};
