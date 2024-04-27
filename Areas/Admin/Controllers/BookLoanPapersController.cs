@@ -89,12 +89,14 @@ namespace QLTV.Areas.Admin.Controllers
                 if(bookDetail.Quantitly >= 0)
                 {
                     _context.Books.Update(bookDetail);
+                    _context.SaveChanges();
                     _context.LoanPaperDetails.Add(loanDetail);
                 }
                 else
                 {
                     ViewBag.Quantitly = "Số lượng sách mượn vượt quá số lượng hiện có!";
                     check = false;
+                    break;
                 }
             }
             if (check)
