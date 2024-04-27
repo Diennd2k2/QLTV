@@ -1,0 +1,77 @@
+﻿@model X.PagedList.IPagedList<QLTV.Models.BookLoanPapers>
+@using X.PagedList.Mvc.Core;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section class="content" style="padding-top: 20px">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách độc giả</h3>
+                        <div class="card-tools">
+                            <form action="/Admin/BookLoanPapersModel/Index" method="GET">
+                                <div class="input-group input-group-sm" style="width: 350px;">
+                                    <input type="text" name="Search" class="form-control float-right" placeholder="Tìm kiếm ....">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <a class="btn btn-primary" href="/Admin/BookLoanPapersModel/Create">Thêm mới phiếu mượn</a>
+                        <table class="table table-bordered" style="margin-top: 20px">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Mã thẻ</th>
+                                    <th style="text-align: center">Mã độc giả</th>
+                                    <th style="text-align: center">Mã phiếu mượn</th>
+                                    <th style="text-align: center">Ngày mượn</th>
+                                    <th style="text-align: center">Ngày trả</th>
+                                    <th style="text-align: center">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var loanBook in Model)
+                                {
+                                    <tr>
+                                        <td>@loanBook.IdLibraryCard</td>
+                                        <td>@loanBook.IdReader</td>
+                                        <td>@loanBook.IdLoanPaper</td>
+                                        <td>@loanBook.DateLoan.ToString("dd/MM/yyyy")</td>
+                                        <td>@loanBook.DatePay.ToString("dd/MM/yyyy")</td>
+                                        <td>@(loanBook.Status == 1 ? "Đang mượn" : "Đã trả")</td>
+                                        <td style="text-align: center">
+                                            <a style="color: green" href="/Admin/Readers/Edit?id=@loanBook.IdLoanPaper" title="Sửa thông tin"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a style="color: red;padding-left: 20px" href="/Admin/Readers/Delete?id=@loanBook.IdLoanPaper" title="Xóa bản ghi"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        <ul class="pagination pagination-sm m-0 float-right">
+                            @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+                                     new PagedListRenderOptions
+                            {
+                                LiElementClasses = new string[] { "page-item" },
+                                PageClasses = new string[] { "page-link" }
+                            }
+                                     )
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
