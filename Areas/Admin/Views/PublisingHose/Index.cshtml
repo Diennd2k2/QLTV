@@ -56,12 +56,12 @@
                                 @foreach (var publisingHouse in Model)
                                 {
                                 <tr>
-                                    <td>@publisingHouse.IdPublisingHouse</td>
+                                    <td style="text-align: center">@publisingHouse.IdPublisingHouse</td>
                                     <td>@publisingHouse.Name</td>
                                     <td>@publisingHouse.Address</td>
                                     <td>@publisingHouse.Country</td>
-                                    @*<td>@Html.DisplayFor(Model => publisingHouse.CreateDate.Value.ToString("dd/MM/yyyy"))</td>*@
-                                    <td>
+                                    <td>@String.Format("{0:dd/MM/yyyy}", publisingHouse.CreateDate)</td>
+                                    <td style="text-align: center">
                                         @if (publisingHouse.Status == 1)
                                         {
                                             <span class="badge bg-success">Sử dụng</span>

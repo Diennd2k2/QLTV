@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section class="content" style="padding-top: 20px">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Thêm mới nhân viên</h3>
+                </div>
+
+                <form action="/Admin/Account/Create" method="POST" enctype="multipart/form-data">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label> Tên nhân viên<span style="color: red">(*)</span></label>
+                                    <input type="text" name="FullName" class="form-control" placeholder="Nhập tên nhân viên">
+                                    <b class="text-danger">@ViewBag.FullName</b>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label> Ngày sinh</label>
+                                    <input type="date" name="DateOfBirth" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label> Tên đăng nhập<span style="color: red">(*)</span></label>
+                                    <input type="text" name="UserName" class="form-control" placeholder="Tên đăng nhập">
+                                    <b class="text-danger">@ViewBag.UserName</b>
+                                    <b class="text-danger">@ViewBag.UserName</b>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="EmailReader"> Mật khẩu<span style="color: red">(*)</span></label>
+                                    <input type="password" name="Password" class="form-control" placeholder="Nhập mật khẩu">
+                                    <b class="text-danger">@ViewBag.Password</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Avatar"> Ảnh đại diện</label>
+                                    <input type="file" class="form-control-file" name="Avatar">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="DateOfBirth"> Chức vụ<span style="color: red">(*)</span></label>
+                                    <select class="form-control" name="IdRole">
+                                        <option value="0">-------------------- Chọn chức vụ --------------------</option>
+                                        @foreach (var cate in ViewBag.listRole)
+                                        {
+                                            <option value="@cate.IdRole">@cate.NameRole</option>
+                                        }
+                                    </select>
+                                    <b class="text-danger">@ViewBag.Role</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Trạng thái</label>
+                                    <br>
+                                    <input type="radio" name="Status" value="1" checked>Hoạt động
+                                    <input type="radio" name="Status" value="2">Không hoạt động
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
